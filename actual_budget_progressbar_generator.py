@@ -76,7 +76,7 @@ styles = [
 
     [
         "▷", "▶"
-    ] #11 • arrows
+    ], #11 • arrows
 ]
 
 
