@@ -26,28 +26,27 @@ Documentation:
 
 https://actualbudget.org/docs/experimental/formulas/
 
-## Run
+## Download
 
-Download the script:
+Download the latest version of the generator:
 
-`actual_budget_progressbar_generator.py`
+[`actualbudget-progressbar-generator.py`](https://raw.githubusercontent.com/mattisvosswinkel/actualbudget-progressbar/main/actualbudget-progressbar-generator.py)
 
-Run it with:
+Or clone the repository:
 
 ```bash
-python3 actual_budget_progressbar_generator.py
+git clone https://github.com/mattisvosswinkel/actualbudget-progressbar.git
 ```
-
-The script generates:
-
-- Progress Formula
-- Color Formula
-
-Copy both formulas into your Actual Budget Formula Card.
 
 ## Configuration
 
-At the top of the script you can change:
+Open the script with your preferred text editor, for example:
+
+```bash
+nano actualbudget-progressbar-generator.py
+```
+
+Adjust the settings at the top of the file:
 
 ```python
 MAX_VALUE = 1500
@@ -149,6 +148,21 @@ Example:
 ```
 
 This creates a progressbar that increases from small to full height.
+
+## Run
+
+Run the script:
+
+```bash
+python3 actualbudget-progressbar-generator.py
+```
+
+The script generates:
+
+- Progress Formula
+- Color Formula
+
+Copy both formulas into your Actual Budget Formula Card.
 
 ## Features
 
