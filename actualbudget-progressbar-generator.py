@@ -139,7 +139,6 @@ percent = [
     '"% "'
 ]
 
-
 if SHOW_PERCENT and PERCENT_POSITION == 0:
     if before_space > 0:
         parts.append('"' + (" " * before_space) + '"')
