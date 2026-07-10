@@ -4,7 +4,7 @@
 # Settings
 # ==========================
 
-MAX_VALUE = 1500
+MAX_VALUE = 150000
 # Maximum value / target value that represents 100%
 
 QUERY_NAME = "reserva"
