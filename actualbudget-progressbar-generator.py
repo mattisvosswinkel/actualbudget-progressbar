@@ -122,7 +122,7 @@ query = f'QUERY("{QUERY_NAME}")'
 
 
 # ==========================
-# Progress Formula
+# Formula
 # ==========================
 
 parts = []
@@ -162,7 +162,7 @@ for i in range(BAR_LENGTH):
         )
 
         formula += (
-            f'{query}/{MAX_VALUE}<{threshold:.10f},"{char}",'
+            f'{query}/{MAX_VALUE}<{threshold:.10f}'.rstrip("0").rstrip(".") + f',"{char}",'
         )
 
     formula += f'TRUE(),"{chars[-1]}")'
@@ -184,7 +184,7 @@ progress_formula = (
 
 
 # ==========================
-# Color Formula
+# Conditional color
 # ==========================
 
 color_formula = f"""=IFS(
@@ -235,14 +235,14 @@ print(f"Decimals:          {PERCENT_DECIMALS}")
 
 print()
 
-print(GREEN + "Progress Formula" + RESET)
+print(GREEN + "Formula" + RESET)
 print("─────────────────")
 print()
 print(YELLOW + progress_formula + RESET)
 
 print()
 
-print(GREEN + "Color Formula" + RESET)
+print(GREEN + "Conditional color" + RESET)
 print("──────────────")
 print()
 print(YELLOW + color_formula + RESET)
