@@ -80,22 +80,29 @@ Change `STYLE` to select a different progressbar style.
 
 | ID | Name | Example |
 |---|---|---|
-| 0 | dotted | ⣀ ⣄ ⣤ ⣦ ⣶ ⣷ ⣿ |
-| 1 | shaded | ░ ▒ ▓ █ |
-| 2 | shaded (reduced) | ░ █ |
-| 3 | gradient | ▁ ▂ ▃ ▅ ▆ ▇ ▉ |
-| 4 | blocks | □ ■ |
-| 5 | battery | ▱ ▰ |
-| 6 | lines | ⎯ ▬ |
-| 7 | checked | □ ☒ |
-| 8 | circles | ○ ● |
-| 9 | dots | ∘ • |
-| 10 | stars | ☆ ★ |
-| 11 | arrows | ▷ ▶ |
+| 0 | dotted | ⣀⣄⣤⣦⣶⣷⣿ |
+| 1 | dotted (left) | ⣀⣄⣆⣇⣧⣷⣿ |
+| 2 | shaded | ░▒▓█ |
+| 3 | shaded (reduced) | ░█ |
+| 4 | gradient | ▁▂▃▅▆▇ |
+| 5 | battery | ▱▰ |
+| 6 | line | ┈─ |
+| 7 | simple (terminal) | ━▇ |
+| 8 | minimal (with space) |  ▇ |
+| 9 | blocks | □■ |
+| 10 | checked | □☒ |
+| 11 | circles | ○● |
+| 12 | dots | ∘• |
+| 13 | stars | ☆★ |
+| 14 | arrows | ▷▶ |
 
 Preview of all available styles:
 
-<img src="https://i.imgur.com/stPXsys.png" style="max-width:100%; height:auto;">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://i.imgur.com/CrP9cjh.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://i.imgur.com/funASwN.png">
+  <img src="https://i.imgur.com/Mlk9QrM.png" style="max-width:100%; height:auto;">
+</picture>
 
 ## Add your own style
 
@@ -122,8 +129,8 @@ styles = [
     ], #0 • dotted
 
     [
-        "░", "▒", "▓", "█"
-    ], #1 • shaded
+        "⣀", "⣄", "⣆", "⣇", "⣧", "⣷", "⣿"
+    ], #1 • dotted (left)
 ]
 ```
 
@@ -132,7 +139,7 @@ The second style in the list automatically has the ID `1`.
 After adding a new style, use the position number as the `STYLE` value:
 
 ```python
-STYLE = 12
+STYLE = 15
 ```
 
 The first character should represent an empty or low progress state.
@@ -142,12 +149,52 @@ The last character should represent full progress.
 Example:
 
 ```python
-[
-    "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"
-], #12 • height gradient
+    [
+        "▁", "▂", "▃", "▅", "▆", "▇"
+    ], #4 • gradient
 ```
 
 This creates a progressbar that increases from small to full height.
+
+## Custom spacing
+
+Some progressbar styles may need additional spacing to look correctly aligned.
+
+You can adjust the spacing inside the `style_spacing` dictionary:
+
+```python
+style_spacing = {
+    15: (2, 3),
+}
+```
+
+The number `15` in this example is the style ID. It must match the position of your custom style inside the `styles` list.
+
+The first value controls the spaces **before** the progressbar.
+
+The second value controls the spaces **after** the progressbar.
+
+Example:
+
+```python
+15: (3, 5)
+```
+
+Result:
+
+```
+   █████████     
+```
+
+If a style does not need custom spacing, you do not need to add it.
+
+The default spacing is automatically:
+
+```python
+(1, 1)
+```
+
+The style ID must match the position of your style inside the `styles` list.
 
 ## Run
 
