@@ -243,7 +243,7 @@ print(YELLOW + progress_formula + RESET)
 print()
 
 print(GREEN + "Conditional color" + RESET)
-print("──────────────")
+print("─────────────────")
 print()
 print(YELLOW + color_formula + RESET)
 
