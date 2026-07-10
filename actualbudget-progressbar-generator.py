@@ -4,19 +4,19 @@
 # Settings
 # ==========================
 
-MAX_VALUE = 1000
+MAX_VALUE = 1500
 # Maximum value / target value that represents 100%
 
-QUERY_NAME = "reserves"
+QUERY_NAME = "Rücklagen"
 # Actual Budget query name
 
 BAR_LENGTH = 10
 # Number of characters used for the progressbar length
 
-STYLE = 0
+STYLE = 14
 # Select style number from the styles list below
 
-SHOW_PERCENT = 1
+SHOW_PERCENT = 0
 # Show percentage value (1 = enabled, 0 = disabled)
 
 PERCENT_POSITION = 0
@@ -35,50 +35,81 @@ styles = [
     ], #0 • dotted
 
     [
+        "⣀", "⣄", "⣆", "⣇", "⣧", "⣷", "⣿"
+    ], #1 • dotted (left)
+
+    [
         "░", "▒", "▓", "█"
-    ], #1 • shaded
+    ], #2 • shaded
 
     [
         "░", "█"
-    ], #2 • shaded (reduced)
+    ], #3 • shaded (reduced)
 
     [
         "▁", "▂", "▃", "▅", "▆", "▇"
-    ], #3 • gradient
-
-    [
-        "□", "■"
-    ], #4 • blocks
+    ], #4 • gradient
 
     [
         "▱", "▰"
     ], #5 • battery
 
     [
-        "⎯", "▬"
-    ], #6 • lines
+        "┈", "─"
+    ], #6 • line
+
+    [
+        "━", "▇"
+    ], #7 • simple (terminal)
+
+    [
+        " ", "▇"
+    ], #8 • minimal (with space)
+
+    [
+        "□", "■"
+    ], #9 • blocks
 
     [
         "□", "☒"
-    ], #7 • checked
+    ], #10 • checked
 
     [
         "○", "●"
-    ], #8 • circles
+    ], #11 • circles
 
     [
         "∘", "•"
-    ], #9 • dots
+    ], #12 • dots
 
     [
         "☆", "★"
-    ], #10 • stars
+    ], #13 • stars
 
     [
         "▷", "▶"
-    ], #11 • arrows
+    ], #14 • arrows
 ]
 
+# ==========================
+# Style Spacing
+# ==========================
+
+style_spacing = {
+    2: (3, 6),
+    3: (3, 6),
+    4: (3, 6),
+    6: (3, 6),
+    7: (3, 6),
+    8: (3, 6),
+    9: (3, 4),
+    10: (3, 4),
+    11: (3, 4),
+    13: (5, 6),
+    14: (3, 3),
+}
+
+before_space, after_space = style_spacing.get(STYLE, (1, 1))
 
 # ==========================
 # Preparation
@@ -104,21 +135,24 @@ percent_format = (
 
 
 percent = [
-    '" "',
     f'TEXT({query}/{MAX_VALUE}*100,"{percent_format}")',
-    '"%"'
+    '"% "'
 ]
 
 
 if SHOW_PERCENT and PERCENT_POSITION == 0:
+    if before_space > 0:
+        parts.append('"' + (" " * before_space) + '"')
     parts.extend(percent)
-    parts.append('" "')
 
+if not SHOW_PERCENT:
+    parts.append('"' + (" " * before_space) + '"')
 
 for i in range(BAR_LENGTH):
 
     start = i / BAR_LENGTH
     end = (i + 1) / BAR_LENGTH
+
 
     formula = "IFS("
 
@@ -138,12 +172,10 @@ for i in range(BAR_LENGTH):
 
 
 if SHOW_PERCENT and PERCENT_POSITION == 1:
-    parts.append('" "')
+    parts.append('"' + (" " * after_space) + '"')
     parts.extend(percent)
-
-
-parts.append('" "')
-
+else:
+    parts.append('"' + (" " * after_space) + '"')
 
 progress_formula = (
     "=CONCATENATE(" +
