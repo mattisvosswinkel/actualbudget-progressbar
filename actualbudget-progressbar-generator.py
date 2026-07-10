@@ -7,16 +7,16 @@
 MAX_VALUE = 1500
 # Maximum value / target value that represents 100%
 
-QUERY_NAME = "Rücklagen"
+QUERY_NAME = "reserva"
 # Actual Budget query name
 
 BAR_LENGTH = 10
 # Number of characters used for the progressbar length
 
-STYLE = 14
+STYLE = 0
 # Select style number from the styles list below
 
-SHOW_PERCENT = 0
+SHOW_PERCENT = 1
 # Show percentage value (1 = enabled, 0 = disabled)
 
 PERCENT_POSITION = 0
