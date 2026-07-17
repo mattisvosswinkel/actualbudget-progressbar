@@ -99,8 +99,8 @@ Change `STYLE` to select a different progressbar style.
 Preview of all available styles:
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://i.imgur.com/7imJgxE.png">
-  <source media="(prefers-color-scheme: light)" srcset="https://i.imgur.com/CVSNBeL.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://i.imgur.com/V8VYV3W.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://i.imgur.com/gKR2Ukh.png">
   <img src="https://i.imgur.com/Mlk9QrM.png" style="max-width:100%; height:auto;">
 </picture>
 
