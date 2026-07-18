@@ -23,7 +23,36 @@ PERCENT_POSITION = 0
 # Percentage position (0 = before bar, 1 = after bar)
 
 PERCENT_DECIMALS = 2
-# Decimal places of percentage (0 = 73%, 2 = 72.57%, 3 = 72.568%)
+# Decimal places of percentage
+# 0 = 73%
+# 2 = 72.57%
+# 3 = 72.568%
+
+
+# ==========================
+# Color Settings
+# ==========================
+
+COLOR_PRESET = 0
+# 0 = Green → Yellow → Orange → Red
+# 1 = Green → Yellow → Red
+# 2 = Smooth
+# 3 = Custom
+
+
+CUSTOM_THRESHOLDS = [
+    0.25,
+    0.50,
+    0.75,
+]
+
+CUSTOM_COLORS = [
+    "theme_reportsRed",
+    "#ffbd8a",
+    "#ffe28a",
+    "theme_reportsGreen",
+]
+
 
 # ==========================
 # Styles
@@ -64,7 +93,7 @@ styles = [
 
     [
         " ", "▇"
-    ], #8 • minimal (with space)
+    ], #8 • minimal
 
     [
         "□", "■"
@@ -91,6 +120,7 @@ styles = [
     ], #14 • arrows
 ]
 
+
 # ==========================
 # Style Spacing
 # ==========================
@@ -99,17 +129,21 @@ style_spacing = {
     2: (3, 6),
     3: (3, 6),
     4: (3, 6),
+
     6: (3, 6),
     7: (3, 6),
     8: (3, 6),
+
     9: (3, 4),
     10: (3, 4),
     11: (3, 4),
+
     13: (5, 6),
     14: (3, 3),
 }
 
 before_space, after_space = style_spacing.get(STYLE, (1, 1))
+
 
 # ==========================
 # Preparation
@@ -122,7 +156,7 @@ query = f'QUERY("{QUERY_NAME}")'
 
 
 # ==========================
-# Formula
+# Progress Formula
 # ==========================
 
 parts = []
@@ -139,19 +173,23 @@ percent = [
     '"% "'
 ]
 
+
 if SHOW_PERCENT and PERCENT_POSITION == 0:
+
     if before_space > 0:
         parts.append('"' + (" " * before_space) + '"')
+
     parts.extend(percent)
+
 
 if not SHOW_PERCENT:
     parts.append('"' + (" " * before_space) + '"')
+
 
 for i in range(BAR_LENGTH):
 
     start = i / BAR_LENGTH
     end = (i + 1) / BAR_LENGTH
-
 
     formula = "IFS("
 
@@ -161,20 +199,29 @@ for i in range(BAR_LENGTH):
             (end - start) * ((j + 1) / steps)
         )
 
+        value = (
+            f'{query}/{MAX_VALUE}<{threshold:.10f}'
+            .rstrip("0")
+            .rstrip(".")
+        )
+
         formula += (
-            f'{query}/{MAX_VALUE}<{threshold:.10f}'.rstrip("0").rstrip(".") + f',"{char}",'
+            f'{value},"{char}",'
         )
 
     formula += f'TRUE(),"{chars[-1]}")'
 
     parts.append(formula)
 
-
 if SHOW_PERCENT and PERCENT_POSITION == 1:
+
     parts.append('"' + (" " * after_space) + '"')
     parts.extend(percent)
+
 else:
+
     parts.append('"' + (" " * after_space) + '"')
+
 
 progress_formula = (
     "=CONCATENATE(" +
@@ -184,15 +231,73 @@ progress_formula = (
 
 
 # ==========================
-# Conditional color
+# Color Formula
 # ==========================
 
-color_formula = f"""=IFS(
-  {query}/{MAX_VALUE}<0.25,theme_reportsRed,
-  {query}/{MAX_VALUE}<0.50,"#ffbd8a",
-  {query}/{MAX_VALUE}<0.75,"#ffe28a",
-  TRUE(),theme_reportsGreen
-)"""
+if COLOR_PRESET == 0:
+
+    thresholds = [
+        0.25,
+        0.50,
+        0.75,
+    ]
+
+    colors = [
+        "theme_reportsRed",
+        "#ffbd8a",
+        "#ffe28a",
+        "theme_reportsGreen",
+    ]
+
+
+elif COLOR_PRESET == 1:
+
+    thresholds = [
+        0.50,
+        0.75,
+    ]
+
+    colors = [
+        "theme_reportsRed",
+        "#ffe28a",
+        "theme_reportsGreen",
+    ]
+
+
+elif COLOR_PRESET == 2:
+
+    thresholds = [
+        0.40,
+        0.65,
+        0.85,
+    ]
+
+    colors = [
+        "theme_reportsRed",
+        "#ffbd8a",
+        "#ffe28a",
+        "theme_reportsGreen",
+    ]
+
+
+elif COLOR_PRESET == 3:
+
+    thresholds = CUSTOM_THRESHOLDS
+    colors = CUSTOM_COLORS
+
+
+color_formula = "=IFS("
+
+for i, threshold in enumerate(thresholds):
+
+    color_formula += (
+        f'{query}/{MAX_VALUE}<{threshold},'
+        f'{colors[i]},'
+    )
+
+color_formula += (
+    f'TRUE(),{colors[-1]})'
+)
 
 
 # ==========================
@@ -205,7 +310,7 @@ CYAN = "\033[96m"
 BLUE = "\033[94m"
 GREEN = "\033[92m"
 YELLOW = "\033[93m"
-GRAY = "\033[90m"
+
 
 # ==========================
 # Output
@@ -225,6 +330,7 @@ print()
 
 print(BLUE + "Settings" + RESET)
 print("────────")
+
 print(f"Query:             {QUERY_NAME}")
 print(f"Max Value:         {MAX_VALUE}")
 print(f"Length:            {BAR_LENGTH}")
@@ -232,20 +338,24 @@ print(f"Style:             {STYLE}")
 print(f"Show Percent:      {SHOW_PERCENT}")
 print(f"Percent Position:  {PERCENT_POSITION}")
 print(f"Decimals:          {PERCENT_DECIMALS}")
+print(f"Color Preset:      {COLOR_PRESET}")
+
 
 print()
 
-print(GREEN + "Formula" + RESET)
+print(GREEN + "Progress Formula" + RESET)
 print("─────────────────")
 print()
 print(YELLOW + progress_formula + RESET)
 
+
 print()
 
-print(GREEN + "Conditional color" + RESET)
-print("─────────────────")
+print(GREEN + "Color Formula" + RESET)
+print("──────────────")
 print()
 print(YELLOW + color_formula + RESET)
+
 
 print()
 
