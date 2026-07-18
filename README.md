@@ -8,6 +8,7 @@ It generates:
 - a color formula
 - multiple progressbar styles
 - optional percentage display
+- customizable colors
 
 ## Requirements
 
@@ -37,6 +38,21 @@ Or clone the repository:
 ```bash
 git clone https://github.com/mattisvosswinkel/actualbudget-progressbar.git
 ```
+
+## Run
+
+Run the script:
+
+```bash
+python3 actualbudget-progressbar-generator.py
+```
+
+The script generates:
+
+- Progress Formula
+- Color Formula
+
+Copy both formulas into your Actual Budget Formula Card.
 
 ## Configuration
 
@@ -74,6 +90,59 @@ PERCENT_DECIMALS = 0
 # 3 = 72.534%
 ```
 
+## Color Settings
+
+The generated color formula can also be customized.
+
+```python
+COLOR_PRESET = 0
+```
+
+Available presets:
+
+| ID | Description |
+|---|---|
+| 0 | Green → Yellow → Orange → Red |
+| 1 | Green → Yellow → Red (without orange) |
+| 2 | Smooth color transition |
+| 3 | Custom colors |
+
+Default:
+
+```python
+COLOR_PRESET = 0
+```
+
+### Custom colors
+
+If `COLOR_PRESET = 3`, you can define your own colors:
+
+```python
+CUSTOM_THRESHOLDS = [
+    0.25,
+    0.50,
+    0.75
+]
+
+CUSTOM_COLORS = [
+    "theme_reportsRed",
+    "#ffbd8a",
+    "#ffe28a",
+    "theme_reportsGreen"
+]
+```
+
+The number of thresholds must always be one less than the number of colors.
+
+Example:
+
+```
+0-25%     red
+25-50%    orange
+50-75%    yellow
+75-100%   green
+```
+
 ## Styles
 
 Change `STYLE` to select a different progressbar style.
@@ -88,7 +157,7 @@ Change `STYLE` to select a different progressbar style.
 | 5 | battery | ▱▰ |
 | 6 | line | ┈─ |
 | 7 | simple (terminal) | ━▇ |
-| 8 | minimal (with space) |  ▇ |
+| 8 | minimal |  ▇ |
 | 9 | blocks | □■ |
 | 10 | checked | □☒ |
 | 11 | circles | ○● |
@@ -104,21 +173,22 @@ Preview of all available styles:
   <img src="https://i.imgur.com/Mlk9QrM.png" style="max-width:100%; height:auto;">
 </picture>
 
+> [!NOTE]
+> Unicode characters can look different depending on your browser, operating system, font, device, or Actual Budget version. Some progressbar styles may therefore not look exactly the same everywhere.
+
 ## Add your own style
 
 You can add your own progressbar style inside the `styles` list in the Python file.
 
-Actual Budget may display some characters differently depending on the font, device, or browser. If a character looks wrong, try another Unicode character or a different style.
-
-Add a new list with your characters:
+Example:
 
 ```python
 [
     "○", "◔", "◑", "◕", "●"
-], #12 • your style name
+], #15 • your style name
 ```
 
-The style ID is automatically based on the position of the style inside the `styles` list.
+The style ID is automatically based on the position inside the `styles` list.
 
 Example:
 
@@ -134,9 +204,9 @@ styles = [
 ]
 ```
 
-The second style in the list automatically has the ID `1`.
+The second style automatically has the ID `1`.
 
-After adding a new style, use the position number as the `STYLE` value:
+After adding a new style, use its position number:
 
 ```python
 STYLE = 15
@@ -149,16 +219,16 @@ The last character should represent full progress.
 Example:
 
 ```python
-    [
-        "▁", "▂", "▃", "▅", "▆", "▇"
-    ], #4 • gradient
+[
+    "▁", "▂", "▃", "▅", "▆", "▇"
+], #4 • gradient
 ```
 
 This creates a progressbar that increases from small to full height.
 
 ## Custom spacing
 
-Some progressbar styles may need additional spacing to look correctly aligned.
+Some styles need additional spacing to look correctly aligned.
 
 You can adjust the spacing inside the `style_spacing` dictionary:
 
@@ -168,11 +238,9 @@ style_spacing = {
 }
 ```
 
-The number `15` in this example is the style ID. It must match the position of your custom style inside the `styles` list.
+The first number controls the spaces **before** the progressbar.
 
-The first value controls the spaces **before** the progressbar.
-
-The second value controls the spaces **after** the progressbar.
+The second number controls the spaces **after** the progressbar.
 
 Example:
 
@@ -186,30 +254,15 @@ Result:
    █████████     
 ```
 
-If a style does not need custom spacing, you do not need to add it.
+If a style does not need custom spacing, no entry is required.
 
-The default spacing is automatically:
+The default spacing is:
 
 ```python
 (1, 1)
 ```
 
 The style ID must match the position of your style inside the `styles` list.
-
-## Run
-
-Run the script:
-
-```bash
-python3 actualbudget-progressbar-generator.py
-```
-
-The script generates:
-
-- Progress Formula
-- Color Formula
-
-Copy both formulas into your Actual Budget Formula Card.
 
 ## Features
 
@@ -218,7 +271,9 @@ Copy both formulas into your Actual Budget Formula Card.
 - Custom maximum values
 - Multiple progressbar styles
 - Percentage customization
-- Color formula generation
+- Custom spacing
+- Custom color presets
+- Custom color formulas
 - Works with Actual Budget Formula Cards
 
 ## License
