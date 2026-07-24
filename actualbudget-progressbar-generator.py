@@ -290,13 +290,25 @@ color_formula = "=IFS("
 
 for i, threshold in enumerate(thresholds):
 
+    color = colors[i]
+
+    if color.startswith("#"):
+        color = f'"{color}"'
+
     color_formula += (
         f'{query}/{MAX_VALUE}<{threshold},'
-        f'{colors[i]},'
+        f'{color},'
     )
 
+
+last_color = colors[-1]
+
+if last_color.startswith("#"):
+    last_color = f'"{last_color}"'
+
+
 color_formula += (
-    f'TRUE(),{colors[-1]})'
+    f'TRUE(),{last_color})'
 )
 
 
